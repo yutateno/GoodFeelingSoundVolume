@@ -21,12 +21,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SoundProcess::Load(bgm1, SoundProcess::ESOUNDNAME::normalBGM, SoundProcess::ESOUNDTYPE::soundStreem);
 
 	int bgm2 = LoadSoundMem("media\\変更後\\戦闘BGM.wav");
-	SoundProcess::Load(bgm1, SoundProcess::ESOUNDNAME::battleBGM, SoundProcess::ESOUNDTYPE::soundStreem);
+	SoundProcess::Load(bgm2, SoundProcess::ESOUNDNAME::battleBGM, SoundProcess::ESOUNDTYPE::soundStreem);
 
 	int se1 = LoadSoundMem("media\\変更後\\piano攻撃音.wav");
 	SoundProcess::Load(se1, SoundProcess::ESOUNDNAME::pianoAttack, SoundProcess::ESOUNDTYPE::soundMem);
-
-	SoundProcess::DoSound(SoundProcess::ESOUNDNAME::normalBGM);
+	int se2 = LoadSoundMem("media\\変更後\\piano攻撃音1.wav");
+	SoundProcess::Load(se2, SoundProcess::ESOUNDNAME::pianoAttack1, SoundProcess::ESOUNDTYPE::soundMem);
+	int se3 = LoadSoundMem("media\\変更後\\piano攻撃音2.wav");
+	SoundProcess::Load(se3, SoundProcess::ESOUNDNAME::pianoAttack2, SoundProcess::ESOUNDTYPE::soundMem);
 
 	// ＥＳＣキーが押されるかウインドウが閉じられるまでループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
@@ -38,20 +40,38 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		if (CheckHitKey(KEY_INPUT_Z) == 1)
 		{
-			SoundProcess::VolumeIn(SoundProcess::ESOUNDNAME::normalBGM);
+			SoundProcess::BGMVolumeIn(SoundProcess::ESOUNDNAME::normalBGM);
 		}
 
 		if (CheckHitKey(KEY_INPUT_X) == 1)
 		{
-			SoundProcess::VolumeReset(SoundProcess::ESOUNDNAME::normalBGM);
+			SoundProcess::BGMVolumeEnd(SoundProcess::ESOUNDNAME::normalBGM);
+		}
+
+		if (CheckHitKey(KEY_INPUT_C) == 1)
+		{
+			SoundProcess::BGMVolumeTrans(SoundProcess::ESOUNDNAME::battleBGM);
+		}
+
+		if (CheckHitKey(KEY_INPUT_V) == 1)
+		{
+			SoundProcess::BGMVolumeTrans(SoundProcess::ESOUNDNAME::normalBGM);
 		}
 
 		if (CheckHitKey(KEY_INPUT_A) == 1)
 		{
 			SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack);
 		}
+		if (CheckHitKey(KEY_INPUT_S) == 1)
+		{
+			SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack1);
+		}
+		if (CheckHitKey(KEY_INPUT_D) == 1)
+		{
+			SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack2);
+		}
 
-		printfDx("%d\n", GetVolumeSoundMem2(bgm1));
+		printfDx("%d\t%d\n", GetVolumeSoundMem2(bgm1), GetVolumeSoundMem2(bgm2));
 
 		// 裏画面の内容を表画面に反映
 		ScreenFlip();

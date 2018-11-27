@@ -3,12 +3,14 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+#include <vector>
+
 namespace SoundProcess
 {
 	/// サウンドの名前ID
 	enum class ESOUNDNAME
 	{
-		saveOn, saveMiss, pianoAttack, pianoAttack1, pianoAttack2, pianoAttack3
+		saveOn, saveMiss, pianoAttack3, pianoAttack2, pianoAttack1, pianoAttack
 		, jump, pianoAttackMiss, landing, landing2, footFloor, foot
 		, ballPickUp, strikeBomb, ballPawnHigh, ballPawn, lightOneFoot, lightFoot
 		, crayonDie, titleBurnLow, titleBurnLowMagni, titleBurn, titleMusicBox, normalBGM
@@ -36,10 +38,13 @@ namespace SoundProcess
 	void DoSound(ESOUNDNAME name);
 
 	/// 音を入れていく
-	void VolumeIn(ESOUNDNAME name, int volume = 255);
+	void BGMVolumeIn(ESOUNDNAME name, int volume = 255);
+
+	/// 音を変える
+	void BGMVolumeTrans(ESOUNDNAME nextName, int volume = 255);
 
 	/// 音を消す
-	void VolumeReset(ESOUNDNAME name, int volume = 255);
+	void BGMVolumeEnd(ESOUNDNAME name);
 
 	/// 解放する
 	void Release();
@@ -61,3 +66,20 @@ namespace SoundProcess
 
 	void Test();
 }
+
+
+/*
+風呂あがって思いついた
+
+/// 今のBGMから次のBGMに遷移する
+void Volume遷移(ESOUNDNAME nowName, int nowVolume, ESOUNDNAME nextName, int nextVolume);
+
+/// 3D音源はボリュームの調整はしない
+
+/// SEとBGMで優先度から音量を調整する
+/// ぶっちゃけSEはすぐ消えるから音量をフェードさせるよう切り替えなくても良い気がする
+/// でも作れたらSE用のフェード遷移作る
+
+/// 今のBGMの音量を次の音量に変える
+void VolumeFeed(ESOUNDNAME name, int nowVolume, int nextVolume);
+*/
