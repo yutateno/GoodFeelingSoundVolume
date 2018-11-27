@@ -35,16 +35,16 @@ namespace SoundProcess
 	ESOUNDNAME bgmName;
 
 	/// BGM切り替え時の名前
-	ESOUNDNAME nextBGMName;
+	ESOUNDNAME nextBGMName = bgmName;
 
 	/// BGMボリューム
-	int bgmVolume;
+	int bgmVolume = 0;
 
 	/// 直前のBGMボリューム
-	int preBGMVolume = 255;
+	int preBGMVolume = bgmVolume;
 
 	/// 次のBGMボリューム
-	int nextBGMVolume = 255;
+	int nextBGMVolume = bgmVolume;
 	/// ---------------------------------
 
 	void VolumeInProcess();
@@ -57,6 +57,9 @@ namespace SoundProcess
 	{
 		ZeroMemory(loadFlag, sizeof(loadFlag));
 		ZeroMemory(playFlag, sizeof(playFlag));
+		volumeUpFlag = false;
+		volumeDownFlag = false;
+		bgmTransFlag = false;
 		for (int i = 0; i != 33; ++i)
 		{
 			soundLoad[i] = -1;
@@ -177,6 +180,8 @@ namespace SoundProcess
 		{
 			BGMVolumeTransProcess();
 		}
+
+		//printfDx("%d\tDown: %d\tUp: %d\tTrans: %d\n", preBGMVolume, volumeDownFlag, volumeUpFlag, bgmTransFlag);
 	}
 
 	void StageOneSound(int touchNum)
@@ -224,15 +229,15 @@ namespace SoundProcess
 	/// 音を入れていく処理
 	void VolumeInProcess()
 	{
-		preBGMVolume = static_cast<int>((sin(-M_PI / 2 + M_PI / 120 * bgmVolumeCount) + 1) / 2 * bgmVolume);
 		ChangeVolumeSoundMem(static_cast<int>((sin(-M_PI / 2 + M_PI / 120 * bgmVolumeCount) + 1) / 2 * bgmVolume), soundLoad[static_cast<int>(bgmName)]);
 		if (bgmVolumeCount <= 120)
 		{
 			bgmVolumeCount++;
 		}
-		else
+		
+		if (bgmVolumeCount > 120 && volumeUpFlag)
 		{
-			preBGMVolume = bgmVolume;
+			preBGMVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
 			volumeUpFlag = false;
 		}
 	}
@@ -247,6 +252,7 @@ namespace SoundProcess
 
 		volumeUpFlag = true;
 		bgmName = name;
+		nextBGMName = bgmName;
 		bgmVolume = volume;
 		bgmVolumeCount = 0;
 	}
@@ -257,17 +263,17 @@ namespace SoundProcess
 	{
 		ChangeVolumeSoundMem(static_cast<int>((sin(-M_PI / 2 + M_PI / 120 * bgmVolumeCount) + 1) / 2 * bgmVolume), soundLoad[static_cast<int>(bgmName)]);
 
-		preBGMVolume = static_cast<int>(nextBGMVolume - (sin(-M_PI / 2 + M_PI / 120 * bgmVolumeCount) + 1) / 2 * nextBGMVolume);
 		ChangeVolumeSoundMem(static_cast<int>(nextBGMVolume - (sin(-M_PI / 2 + M_PI / 120 * bgmVolumeCount) + 1) / 2 * nextBGMVolume), soundLoad[static_cast<int>(nextBGMName)]);
 		if (bgmVolumeCount >= 0)
 		{
 			bgmVolumeCount--;
 		}
-		else
+		
+		if (bgmVolumeCount < 0 && bgmTransFlag)
 		{
-			preBGMVolume = nextBGMVolume;
 			bgmName = nextBGMName;
-			bgmVolume = nextBGMVolume;
+			preBGMVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
+			bgmVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
 			bgmTransFlag = false;
 		}
 	}
@@ -278,8 +284,19 @@ namespace SoundProcess
 		PlaySoundMem(soundLoad[static_cast<int>(nextName)], DX_PLAYTYPE_LOOP);
 		ChangeVolumeSoundMem(0, soundLoad[static_cast<int>(nextName)]);
 
+		// なぜか3フレーム呼ばれているので後日の自分どうにかしようZE☆
+		/*if (bgmTransFlag)
+		{
+			printfDx("asD");
+			bgmName = nextBGMName;
+			preBGMVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
+			bgmVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
+			bgmTransFlag = false;
+		}*/
+
+		volumeUpFlag = false;
 		bgmVolumeCount = 120;
-		//bgmVolume = preBGMVolume;
+		bgmVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
 		nextBGMName = nextName;
 		nextBGMVolume = volume;
 		bgmTransFlag = true;
@@ -289,13 +306,13 @@ namespace SoundProcess
 	/// 音を消す処理
 	void VolumeResetProcess()
 	{
-		preBGMVolume = static_cast<int>((sin(-M_PI / 2 + M_PI / 120 * bgmVolumeCount) + 1) / 2 * bgmVolume);
 		ChangeVolumeSoundMem(static_cast<int>((sin(-M_PI / 2 + M_PI / 120 * bgmVolumeCount) + 1) / 2 * bgmVolume), soundLoad[static_cast<int>(bgmName)]);
 		if (bgmVolumeCount >= 0)
 		{
 			bgmVolumeCount--;
 		}
-		else
+		
+		if (bgmVolumeCount < 0 && volumeDownFlag)
 		{
 			volumeDownFlag = false;
 		}
@@ -306,6 +323,7 @@ namespace SoundProcess
 	void BGMVolumeEnd(ESOUNDNAME name)
 	{
 		volumeUpFlag = false;
+		bgmVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(name)]);
 		volumeDownFlag = true;
 		bgmVolumeCount = 120;
 		bgmName = name;
