@@ -23,6 +23,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int bgm2 = LoadSoundMem("media\\変更後\\戦闘BGM.wav");
 	SoundProcess::Load(bgm2, SoundProcess::ESOUNDNAME::battleBGM, SoundProcess::ESOUNDTYPE::soundStreem);
 
+	int bgm3 = LoadSoundMem("media\\変更後\\boss.wav");
+	SoundProcess::Load(bgm3, SoundProcess::ESOUNDNAME::boss, SoundProcess::ESOUNDTYPE::soundStreem);
+
 	int se1 = LoadSoundMem("media\\変更後\\piano攻撃音.wav");
 	SoundProcess::Load(se1, SoundProcess::ESOUNDNAME::pianoAttack, SoundProcess::ESOUNDTYPE::soundMem);
 	int se2 = LoadSoundMem("media\\変更後\\piano攻撃音1.wav");
@@ -55,7 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		if (CheckHitKey(KEY_INPUT_V) == 1)
 		{
-			SoundProcess::BGMVolumeTrans(SoundProcess::ESOUNDNAME::normalBGM);
+			SoundProcess::BGMVolumeTrans(SoundProcess::ESOUNDNAME::boss);
 		}
 
 		if (CheckHitKey(KEY_INPUT_A) == 1)
@@ -71,7 +74,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack2);
 		}
 
-		printfDx("%d\t%d\n", GetVolumeSoundMem2(bgm1), GetVolumeSoundMem2(bgm2));
+		printfDx("%d\t%d\t%d\n", GetVolumeSoundMem2(bgm1), GetVolumeSoundMem2(bgm2), GetVolumeSoundMem2(bgm3));
 
 		// 裏画面の内容を表画面に反映
 		ScreenFlip();

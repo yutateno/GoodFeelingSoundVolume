@@ -37,6 +37,9 @@ namespace SoundProcess
 	/// BGM切り替え時の名前
 	ESOUNDNAME nextBGMName = bgmName;
 
+	/// BGM途中切り替え時の名前
+	ESOUNDNAME tempBGMName = bgmName;
+
 	/// BGMボリューム
 	int bgmVolume = 0;
 
@@ -272,7 +275,7 @@ namespace SoundProcess
 		if (bgmVolumeCount < 0 && bgmTransFlag)
 		{
 			bgmName = nextBGMName;
-			preBGMVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
+			//preBGMVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
 			bgmVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
 			bgmTransFlag = false;
 		}
@@ -285,19 +288,25 @@ namespace SoundProcess
 		ChangeVolumeSoundMem(0, soundLoad[static_cast<int>(nextName)]);
 
 		// なぜか3フレーム呼ばれているので後日の自分どうにかしようZE☆
-		/*if (bgmTransFlag)
+		if (bgmTransFlag && nextName != tempBGMName)
 		{
-			printfDx("asD");
+			if (bgmName != nextName)
+			{
+				StopSoundMem(soundLoad[static_cast<int>(bgmName)]);
+				ChangeVolumeSoundMem(0, soundLoad[static_cast<int>(bgmName)]);
+			}
 			bgmName = nextBGMName;
-			preBGMVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
-			bgmVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
-			bgmTransFlag = false;
-		}*/
+			//preBGMVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
+			//bgmVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
+			//bgmTransFlag = false;
+		}
 
-		volumeUpFlag = false;
+		//volumeUpFlag = false;
 		bgmVolumeCount = 120;
 		bgmVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
+		preBGMVolume = bgmVolume;
 		nextBGMName = nextName;
+		tempBGMName = nextBGMName;
 		nextBGMVolume = volume;
 		bgmTransFlag = true;
 	}
