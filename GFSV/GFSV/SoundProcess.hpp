@@ -7,15 +7,20 @@
 
 namespace SoundProcess
 {
-	/// サウンドの名前ID
-	enum class ESOUNDNAME
+	/// サウンドの名前ID_SE
+	enum class ESOUNDNAME_SE
 	{
 		saveOn, saveMiss, pianoAttack3, pianoAttack2, pianoAttack1, pianoAttack
 		, jump, pianoAttackMiss, landing, landing2, footFloor, foot
 		, ballPickUp, strikeBomb, ballPawnHigh, ballPawn, lightOneFoot, lightFoot
-		, crayonDie, titleBurnLow, titleBurnLowMagni, titleBurn, titleMusicBox, normalBGM
-		, battleBGM, lightBGM, noise3, noise2, noise, noise_2
-		, noise_1, ending, boss
+		, crayonDie, titleBurnLow, titleBurnLowMagni, titleBurn
+	};
+
+	/// サウンドの名前ID_BGM
+	enum class ESOUNDNAME_BGM
+	{
+		titleMusicBox, normalBGM, battleBGM, lightBGM, noise3, noise2
+		, noise, noise_2, noise_1, ending, boss, none
 	};
 
 	/// サウンドタイプ
@@ -29,13 +34,51 @@ namespace SoundProcess
 	void Init();
 
 	/// ロード
-	void Load(int loadFile, ESOUNDNAME name, ESOUNDTYPE type);
+	void Load(int loadFile, ESOUNDNAME_SE name, ESOUNDTYPE type);
+	void Load(int loadFile, ESOUNDNAME_BGM name);
+	void Load(int loadFile, ESOUNDNAME_SE name, ESOUNDTYPE type, VECTOR partnerArea);
+
+	/// プロセス
+	void Process();
+
+	/// SEの再生
+	void DoSound(ESOUNDNAME_SE name, int volume = 255);
+
+	/// BGMの終わり
+	void BGMEnd();
+
+	/// BGM切り替え
+	void BGMTrans(ESOUNDNAME_BGM nextName, int volume = 255);
+
+	/// BGMプロセス
+	void BGMProcess();
+
+	/// BGMフェード
+	void BGMFeed();
+
+	/// BGM音量設定
+	void SetBGMVolume(ESOUNDNAME_BGM name, int volume);
+
+	/// 解放
+	void Release();
+
+
+	void Test();
+
+	/*/// 初期化
+	void Init();
+
+	/// ロード
+	void Load(int loadFile, ESOUNDNAME_SE name, ESOUNDTYPE type);
+
+	/// ロード
+	void Load(int loadFile, ESOUNDNAME_BGM name, ESOUNDTYPE type);
 
 	/// 3Dサウンドのロード
-	void Load(int loadFile, ESOUNDNAME name, ESOUNDTYPE type, VECTOR partnerArea);
+	void Load(int loadFile, ESOUNDNAME_SE name, ESOUNDTYPE type, VECTOR partnerArea);
 
 	/// 再生する
-	void DoSound(ESOUNDNAME name);
+	void DoSound(ESOUNDNAME_SE name);
 
 	/// 音を入れていく
 	void BGMVolumeIn(ESOUNDNAME name, int volume = 255);
@@ -64,7 +107,7 @@ namespace SoundProcess
 
 
 
-	void Test();
+	void Test();*/
 }
 
 
