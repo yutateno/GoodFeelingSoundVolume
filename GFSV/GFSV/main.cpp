@@ -65,11 +65,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//SoundProcess::BGMVolumeTrans(SoundProcess::ESOUNDNAME::boss);
 		}
 
-		if (CheckHitKey(KEY_INPUT_A) == 1)
+		if (CheckHitKey(KEY_INPUT_Q) == 1)
 		{
 			SoundProcess::DoSound(SoundProcess::ESOUNDNAME_SE::pianoAttack);
 			//SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack);
 		}
+		if (CheckHitKey(KEY_INPUT_W) == 1)
+		{
+			SoundProcess::DoSound(SoundProcess::ESOUNDNAME_SE::pianoAttack1);
+			//SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack);
+		}
+		if (CheckHitKey(KEY_INPUT_E) == 1)
+		{
+			SoundProcess::DoSound(SoundProcess::ESOUNDNAME_SE::pianoAttack2);
+			//SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack);
+		}
+
 		if (CheckHitKey(KEY_INPUT_S) == 1)
 		{
 			SoundProcess::BGMTrans(SoundProcess::ESOUNDNAME_BGM::battleBGM);
@@ -92,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 
 
-		printfDx("%d\t%d\t%d\n", GetVolumeSoundMem2(bgm1), GetVolumeSoundMem2(bgm2), GetVolumeSoundMem2(bgm3));
+		printfDx("%d\t%d\t%d\t%d\t%d\t%d\n", GetVolumeSoundMem2(bgm1), GetVolumeSoundMem2(bgm2), GetVolumeSoundMem2(bgm3), GetVolumeSoundMem2(se1), GetVolumeSoundMem2(se2), GetVolumeSoundMem2(se3));
 
 		//SoundProcess::Test();
 
