@@ -287,7 +287,7 @@ namespace SoundProcess
 		PlaySoundMem(soundLoad[static_cast<int>(nextName)], DX_PLAYTYPE_LOOP);
 		ChangeVolumeSoundMem(0, soundLoad[static_cast<int>(nextName)]);
 
-		// なぜか3フレーム呼ばれているので後日の自分どうにかしようZE☆
+		// BGM切り替えがすでに行われていて変更後のBGMが異なる場合
 		if (bgmTransFlag && nextName != tempBGMName)
 		{
 			if (bgmName != nextName)
@@ -296,12 +296,8 @@ namespace SoundProcess
 				ChangeVolumeSoundMem(0, soundLoad[static_cast<int>(bgmName)]);
 			}
 			bgmName = nextBGMName;
-			//preBGMVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
-			//bgmVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
-			//bgmTransFlag = false;
 		}
 
-		//volumeUpFlag = false;
 		bgmVolumeCount = 120;
 		bgmVolume = GetVolumeSoundMem2(soundLoad[static_cast<int>(bgmName)]);
 		preBGMVolume = bgmVolume;
