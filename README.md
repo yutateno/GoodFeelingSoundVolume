@@ -1,0 +1,3 @@
+# GoodFeelingSoundVolume
+BGMやSEのボリューム遷移の気持ち良さを追求したリポジトリ
+
