@@ -43,25 +43,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		if (CheckHitKey(KEY_INPUT_Z) == 1)
 		{
-			SoundProcess::SetBGMVolume(SoundProcess::ESOUNDNAME_BGM::normalBGM, 255);
+			SoundProcess::SetBGMVolume(SoundProcess::ESOUNDNAME_BGM::normalBGM, 50, 50);
 			//SoundProcess::BGMVolumeIn(SoundProcess::ESOUNDNAME::normalBGM);
 		}
 
 		if (CheckHitKey(KEY_INPUT_X) == 1)
 		{
-			SoundProcess::SetBGMVolume(SoundProcess::ESOUNDNAME_BGM::normalBGM, 125);
+			SoundProcess::SetBGMVolume(SoundProcess::ESOUNDNAME_BGM::normalBGM, 125, 125);
 			//SoundProcess::BGMVolumeEnd(SoundProcess::ESOUNDNAME::normalBGM);
 		}
 
 		if (CheckHitKey(KEY_INPUT_C) == 1)
 		{
-			SoundProcess::SetBGMVolume(SoundProcess::ESOUNDNAME_BGM::normalBGM, 230);
+			SoundProcess::SetBGMVolume(SoundProcess::ESOUNDNAME_BGM::normalBGM, 230, 230);
 			//SoundProcess::BGMVolumeTrans(SoundProcess::ESOUNDNAME::battleBGM);
 		}
 
 		if (CheckHitKey(KEY_INPUT_V) == 1)
 		{
-			SoundProcess::SetBGMVolume(SoundProcess::ESOUNDNAME_BGM::normalBGM, 0);
+			SoundProcess::SetBGMVolume(SoundProcess::ESOUNDNAME_BGM::normalBGM, 0, 0);
 			//SoundProcess::BGMVolumeTrans(SoundProcess::ESOUNDNAME::boss);
 		}
 
@@ -99,6 +99,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (CheckHitKey(KEY_INPUT_G) == 1)
 		{
 			SoundProcess::BGMTrans(SoundProcess::ESOUNDNAME_BGM::normalBGM);
+			//SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack2);
+		}
+		if (CheckHitKey(KEY_INPUT_O) == 1)
+		{
+			SoundProcess::BGMEnd();
 			//SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack2);
 		}
 
