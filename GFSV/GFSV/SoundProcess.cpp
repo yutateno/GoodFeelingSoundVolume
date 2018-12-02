@@ -10,46 +10,73 @@ namespace SoundProcess
 	///-------------------------------------------
 
 	/// SEに関する------------------------
+
 	// 保存する
 	int se_sound[seNum];
+
 	// ロードしたかどうか
 	bool se_loadFlag[seNum];
+
 	// 再生しているかどうか
 	bool se_playFlag[seNum];
 
+	// SEのユーザー音量調整
+	float se_volumeAdjustment;
+
+
 	/// BGMに関する-----------------------
+
 	// 保存する
 	int bgm_sound[bgmNum];
+
 	// ロードしたかどうか
 	bool bgm_loadFlag[bgmNum];
+
 	// ボリューム
 	int bgm_nowVolume[bgmArray];
+
 	// BGMの名前
 	ESOUNDNAME_BGM bgm_name[bgmArray];
+
 	// 要求されたBGMのボリューム
 	int bgm_requestVolume[bgmArray];
+
 	// 変更中の目的ボリューム
 	int bgm_nextVolume[bgmArray];
+
 	// フェードカウント
 	int bgm_feedCount[bgmArray];
+
 	// BGMが流れているかどうか
 	bool bgm_soundFlag;
+
 	// BGMの最大指定音量
 	int bgm_maxVolume[bgmArray];
 
+	// BGMのユーザー音量調整
+	float bgm_volumeAdjustment;
+
+
 	/// 3Dに関する-------------------------
+
 	// プレイヤー位置
 	VECTOR charaArea;
+
 	// 発生位置
 	VECTOR partnerArea;
+
 	// リスナー位置
 	VECTOR listenerArea;
 
+
 	/// 内部関数---------------------------
+
 	// BGMプロセス
 	void BGMProcess();
+
 	// BGMフェード
 	void BGMFeed();
+
 
 
 	void Init()
@@ -58,25 +85,29 @@ namespace SoundProcess
 		{
 			se_sound[i] = -1;
 		}
-		ZeroMemory(se_loadFlag		, sizeof(se_loadFlag)		);
-		ZeroMemory(se_playFlag		, sizeof(se_playFlag)		);
+		ZeroMemory(se_loadFlag, sizeof(se_loadFlag));
+		ZeroMemory(se_playFlag, sizeof(se_playFlag));
 		for (int i = 0; i != bgmNum; ++i)
 		{
 			bgm_sound[i] = -1;
 		}
-		ZeroMemory(bgm_loadFlag		, sizeof(bgm_loadFlag)		);
-		ZeroMemory(bgm_nowVolume	, sizeof(bgm_nowVolume)		);
+		ZeroMemory(bgm_loadFlag, sizeof(bgm_loadFlag));
+		ZeroMemory(bgm_nowVolume, sizeof(bgm_nowVolume));
 		for (int i = 0; i != bgmArray; ++i)
 		{
 			bgm_name[i] = ESOUNDNAME_BGM::none;
 		}
-		ZeroMemory(bgm_requestVolume, sizeof(bgm_requestVolume)	);
-		ZeroMemory(bgm_nextVolume	, sizeof(bgm_nextVolume)	);
-		ZeroMemory(bgm_feedCount	, sizeof(bgm_feedCount)		);
-		ZeroMemory(bgm_maxVolume	, sizeof(bgm_maxVolume)		);
+		ZeroMemory(bgm_requestVolume, sizeof(bgm_requestVolume));
+		ZeroMemory(bgm_nextVolume, sizeof(bgm_nextVolume));
+		ZeroMemory(bgm_feedCount, sizeof(bgm_feedCount));
+		ZeroMemory(bgm_maxVolume, sizeof(bgm_maxVolume));
 
 		bgm_soundFlag = false;
+
+		se_volumeAdjustment = 1.0f;
+		bgm_volumeAdjustment = 1.0f;
 	}
+
 
 	void Load(int loadFile, ESOUNDNAME_SE name, ESOUNDTYPE type, VECTOR partnerArea)
 	{
@@ -94,11 +125,13 @@ namespace SoundProcess
 		}
 	}
 
+
 	void Load(int loadFile, ESOUNDNAME_BGM name)
 	{
 		bgm_sound[static_cast<int>(name)] = loadFile;
 		bgm_loadFlag[static_cast<int>(name)] = true;
 	}
+
 
 	void Process()
 	{
@@ -145,7 +178,7 @@ namespace SoundProcess
 			if (!se_playFlag[i]) continue;
 
 			// 音量を下げる
-			ChangeVolumeSoundMem(255 - (10 * count), se_sound[i]);
+			ChangeVolumeSoundMem(static_cast<int>(((255 - (10 * count))) * se_volumeAdjustment), se_sound[i]);
 			if (count > 0)
 			{
 				count--;
@@ -159,6 +192,7 @@ namespace SoundProcess
 		BGMProcess();
 	}
 
+
 	void DoSound(ESOUNDNAME_SE name, int volume)
 	{
 		if (!se_playFlag[static_cast<int>(name)])
@@ -170,6 +204,7 @@ namespace SoundProcess
 		se_playFlag[static_cast<int>(name)] = true;
 	}
 
+
 	void BGMEnd()
 	{
 		for (int i = 0; i != bgmArray; ++i)
@@ -178,6 +213,7 @@ namespace SoundProcess
 			SetBGMVolume(bgm_name[i], 0, 0);
 		}
 	}
+
 
 	void BGMTrans(ESOUNDNAME_BGM nextName, int volume)
 	{
@@ -233,10 +269,13 @@ namespace SoundProcess
 		}
 	}
 
+
 	void BGMProcess()
 	{
 		BGMFeed();
+		printfDx("%d\n", GetVolumeSoundMem2(bgm_sound[static_cast<int>(bgm_name[0])]));
 	}
+
 
 	void BGMFeed()
 	{
@@ -246,12 +285,12 @@ namespace SoundProcess
 		{
 			if (bgm_nowVolume[i] < bgm_nextVolume[i])
 			{
-				ChangeVolumeSoundMem(bgm_nowVolume[i] + static_cast<int>((sin(-M_PI / 2 + M_PI / bgmFeedValue * bgm_feedCount[i]) + 1) / 2 * (bgm_nextVolume[i] - bgm_nowVolume[i]))
+				ChangeVolumeSoundMem(static_cast<int>((bgm_nowVolume[i] + static_cast<int>((sin(-M_PI / 2 + M_PI / bgmFeedValue * bgm_feedCount[i]) + 1) / 2 * (bgm_nextVolume[i] - bgm_nowVolume[i]))) * bgm_volumeAdjustment)
 					, bgm_sound[static_cast<int>(bgm_name[i])]);
 			}
 			else
 			{
-				ChangeVolumeSoundMem(bgm_nowVolume[i] - static_cast<int>((sin(-M_PI / 2 + M_PI / bgmFeedValue * bgm_feedCount[i]) + 1) / 2 * (bgm_nowVolume[i] - bgm_nextVolume[i]))
+				ChangeVolumeSoundMem(static_cast<int>((bgm_nowVolume[i] - static_cast<int>((sin(-M_PI / 2 + M_PI / bgmFeedValue * bgm_feedCount[i]) + 1) / 2 * (bgm_nowVolume[i] - bgm_nextVolume[i]))) * bgm_volumeAdjustment)
 					, bgm_sound[static_cast<int>(bgm_name[i])]);
 			}
 			if (bgm_feedCount[i] <= bgmFeedValue)
@@ -264,6 +303,7 @@ namespace SoundProcess
 			}
 		}
 	}
+
 
 	void SetBGMVolume(ESOUNDNAME_BGM name, int volume, int maxVolume)
 	{
@@ -296,6 +336,7 @@ namespace SoundProcess
 		}
 	}
 
+
 	void Release()
 	{
 		for (int i = 0; i != seNum; ++i)
@@ -313,13 +354,27 @@ namespace SoundProcess
 		}
 	}
 
+
 	void SetCharaArea(VECTOR area)
 	{
 		charaArea = area;
 	}
 
+
 	void SetLisnerArea(VECTOR area)
 	{
 		listenerArea = area;
+	}
+
+
+	void SetSEVolumeEntire(float volumeEntire)
+	{
+		se_volumeAdjustment = volumeEntire;
+	}
+
+
+	void SetBGMVolumeEntire(float volumeEntire)
+	{
+		bgm_volumeAdjustment = volumeEntire;
 	}
 }

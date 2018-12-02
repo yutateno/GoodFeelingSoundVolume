@@ -6,6 +6,7 @@
 namespace SoundProcess
 {
 	/// ゲームによって変わる部分-------------------------------------------------------
+
 	// サウンドの名前ID_SEを優先度順に
 	enum class ESOUNDNAME_SE
 	{
@@ -42,7 +43,7 @@ namespace SoundProcess
 
 	// SEの再生
 	void DoSound(ESOUNDNAME_SE name, int volume = 255);
-	
+
 	// BGMの終わり
 	void BGMEnd();
 
@@ -60,4 +61,10 @@ namespace SoundProcess
 
 	// リスナーの座標を設定
 	void SetLisnerArea(VECTOR area);
+
+	// SEのユーザー音量調整を設定
+	void SetSEVolumeEntire(float volumeEntire);
+
+	// BGMのユーザー音量調整を設定
+	void SetBGMVolumeEntire(float volumeEntire);
 }
