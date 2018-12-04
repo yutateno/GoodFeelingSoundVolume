@@ -273,7 +273,6 @@ namespace SoundProcess
 	void BGMProcess()
 	{
 		BGMFeed();
-		printfDx("%d\n", GetVolumeSoundMem2(bgm_sound[static_cast<int>(bgm_name[0])]));
 	}
 
 

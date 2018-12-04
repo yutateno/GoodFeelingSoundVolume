@@ -106,6 +106,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			SoundProcess::BGMEnd();
 			//SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack2);
 		}
+		if (CheckHitKey(KEY_INPUT_T) == 1)
+		{
+			SoundProcess::SetBGMVolumeEntire(0.5);
+		}
 
 
 		printfDx("%d\t%d\t%d\t%d\t%d\t%d\n", GetVolumeSoundMem2(bgm1), GetVolumeSoundMem2(bgm2), GetVolumeSoundMem2(bgm3), GetVolumeSoundMem2(se1), GetVolumeSoundMem2(se2), GetVolumeSoundMem2(se3));
