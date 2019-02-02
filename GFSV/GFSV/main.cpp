@@ -27,11 +27,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SoundProcess::Load(bgm3, SoundProcess::ESOUNDNAME_BGM::boss);
 
 	int se1 = LoadSoundMem("media\\変更後\\piano攻撃音.wav");
-	SoundProcess::Load(se1, SoundProcess::ESOUNDNAME_SE::pianoAttack, SoundProcess::ESOUNDTYPE::soundMem);
+	SoundProcess::Load(se1, SoundProcess::ESOUNDNAME_SE::pianoAttack);
 	int se2 = LoadSoundMem("media\\変更後\\piano攻撃音1.wav");
-	SoundProcess::Load(se2, SoundProcess::ESOUNDNAME_SE::pianoAttack1, SoundProcess::ESOUNDTYPE::soundMem);
+	SoundProcess::Load(se2, SoundProcess::ESOUNDNAME_SE::pianoAttack1);
 	int se3 = LoadSoundMem("media\\変更後\\piano攻撃音2.wav");
-	SoundProcess::Load(se3, SoundProcess::ESOUNDNAME_SE::pianoAttack2, SoundProcess::ESOUNDTYPE::soundMem);
+	SoundProcess::Load(se3, SoundProcess::ESOUNDNAME_SE::pianoAttack2);
 
 	// ＥＳＣキーが押されるかウインドウが閉じられるまでループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
@@ -84,6 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (CheckHitKey(KEY_INPUT_S) == 1)
 		{
 			SoundProcess::BGMTrans(SoundProcess::ESOUNDNAME_BGM::battleBGM);
+			SoundProcess::SetBGMVolume(SoundProcess::ESOUNDNAME_BGM::battleBGM, 255);
 			//SoundProcess::DoSound(SoundProcess::ESOUNDNAME::pianoAttack1);
 		}
 		if (CheckHitKey(KEY_INPUT_D) == 1)

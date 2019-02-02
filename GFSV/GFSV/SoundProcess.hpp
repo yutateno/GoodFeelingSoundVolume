@@ -3,6 +3,10 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+
+/*
+音周りのプロセス
+*/
 namespace SoundProcess
 {
 	/// ゲームによって変わる部分-------------------------------------------------------
@@ -12,7 +16,7 @@ namespace SoundProcess
 	{
 		saveOn, saveMiss, pianoAttack3, pianoAttack2, pianoAttack1, pianoAttack
 		, jump, pianoAttackMiss, landing, landing2, footFloor, foot
-		, ballPickUp, strikeBomb, ballPawnHigh, ballPawn, lightOneFoot, lightFoot
+		, ballPickUp, ballPickUp2, strikeBomb, ballPawnHigh, ballPawn, lightOneFoot, lightFoot
 		, crayonDie, titleBurnLow, titleBurnLowMagni, titleBurn
 	};
 
@@ -35,7 +39,7 @@ namespace SoundProcess
 	void Init();
 
 	// ロード
-	void Load(int loadFile, ESOUNDNAME_SE name, ESOUNDTYPE type, VECTOR partnerArea = VGet(0, 0, 0));
+	void Load(int loadFile, ESOUNDNAME_SE name);
 	void Load(int loadFile, ESOUNDNAME_BGM name);
 
 	// プロセス
@@ -43,6 +47,9 @@ namespace SoundProcess
 
 	// SEの再生
 	void DoSound(ESOUNDNAME_SE name, int volume = 255);
+
+	// 3DSEの再生
+	void DoSound(ESOUNDNAME_SE name, VECTOR area, int volume = 255);
 
 	// BGMの終わり
 	void BGMEnd();
@@ -62,9 +69,24 @@ namespace SoundProcess
 	// リスナーの座標を設定
 	void SetLisnerArea(VECTOR area);
 
+	// リスナーのビュー座標を設定
+	void SetLisnerViewArea(VECTOR area);
+
+	// サウンドの3Dでの大きさを設定
+	void Set3DRadius(float radius);
+
 	// SEのユーザー音量調整を設定
 	void SetSEVolumeEntire(float volumeEntire);
 
+	// SEのユーザー音量調整を渡す
+	float GetSEVolumeEntire();
+
 	// BGMのユーザー音量調整を設定
 	void SetBGMVolumeEntire(float volumeEntire);
+
+	// BGMのユーザー音量調整を渡す
+	float GetBGMVolumeEntire();
+
+	// オプション画面にいるかどうか、またサウンド調整しているかどうかでもここで調整する
+	void SetOptionMenuNow(bool nowTrue);
 }
